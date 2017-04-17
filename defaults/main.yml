@@ -1,0 +1,6 @@
+---
+# defaults file for nrser.docker-compose-bin
+
+docker_compose_bin_dir: "{{ ansible_env.HOME }}/bin"
+docker_compose_bin_version: latest
+docker_compose_bin_force: false

@@ -1,0 +1,59 @@
+---
+# tasks file for nrser.docker-compose-bin
+#
+# binary URLs look like:
+# 
+#     https://github.com/docker/compose/releases/download/1.12.0/docker-compose-Darwin-x86_64
+# 
+
+- name: >-
+    form the remote filename using ansible_system and ansible_architecture.
+  set_fact:
+    docker_compose_bin_remote_filename: >-
+      docker-compose-{{ ansible_system }}-{{ ansible_architecture }}
+
+- when: docker_compose_bin_version == 'latest'
+  name: need to get latest version name from GitHub
+  include: "{{ role_path }}/tasks/get_latest_version.yml"
+
+- name: >-
+    form the local filename by appending the version to the remote filename.
+  set_fact:
+    docker_compose_bin_local_filename: >-
+      {{ docker_compose_bin_remote_filename }}-{{ docker_compose_bin_version }}
+
+- name: >-
+    form the local desination path by appending the local filename to the bin 
+    directory.
+  set_fact:
+    docker_compose_bin_dest: >-
+      {{ docker_compose_bin_dir }}/{{ docker_compose_bin_local_filename }}
+
+- name: >-
+    download the binary.
+  get_url:
+    url: >-
+      https://github.com/docker/compose/releases/download/{{ docker_compose_bin_version }}/{{ docker_compose_bin_remote_filename }}
+    dest: >-
+      {{ docker_compose_bin_dest }}
+    force: >-
+      {{ docker_compose_bin_force }}
+
+- name: >-
+    mark the downloaded binary as executable.
+  file:
+    path: >-
+      {{ docker_compose_bin_dest }}
+    mode: "a+x"
+
+- name: >-
+    link docker-compose to point to the downloaded binary.
+  file:
+    src: >-
+      {{ docker_compose_bin_dest }}
+    dest: >-
+      {{ docker_compose_bin_dir }}/docker-compose
+    state: link
+    force: >-
+      {{ docker_compose_bin_force }}
+  

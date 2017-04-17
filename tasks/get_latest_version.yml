@@ -1,0 +1,10 @@
+---
+- name: >-
+    get the latest release data from the GitHub API
+  uri:
+    url: https://api.github.com/repos/docker/compose/releases/latest
+  register: docker_compose_bin_gh_api_response
+  
+- set_fact:
+    docker_compose_bin_version: >-
+      {{ docker_compose_bin_gh_api_response.json.name }}
