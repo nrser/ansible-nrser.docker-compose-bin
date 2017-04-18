@@ -3,6 +3,22 @@ nrser.docker-compose-bin [QB][]/Ansible Role
 
 Install [Docker Compose][] from the binary on their GitHub [releases][] page.
 
+1.  Downloads the applicable binary.
+2.  Appends `-<version>` to it.
+3.  Makes it execuable.
+4.  Points `docker-compose` in the same directory to it via symlink.
+
+So you end up with something like:
+
+    lrwxr-xr-x ... docker-compose -> ./docker-compose-Darwin-x86_64-1.12.0
+    -rwxr-xr-x ... docker-compose-Darwin-x86_64-1.12.0
+
+Defaults to install in `~/bin`, specify with the `docker_compose_bin_dir` variable or
+
+    -d, --dir=BIN_DIR
+
+[QB][] CLI option.
+
 
 Compatibility
 -----------------------------------------------------------------------------
@@ -43,7 +59,7 @@ Otherwise, something like
 Usage
 -----------------------------------------------------------------------------
 
-see
+See
 
     qb nrser.docker-compose-bin --help
 

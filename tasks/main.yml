@@ -50,7 +50,7 @@
     link docker-compose to point to the downloaded binary.
   file:
     src: >-
-      {{ docker_compose_bin_dest }}
+      ./{{ docker_compose_bin_local_filename }}
     dest: >-
       {{ docker_compose_bin_dir }}/docker-compose
     state: link
